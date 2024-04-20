@@ -2,6 +2,7 @@
   "name": "api-def",
   "packageManager": "yarn@4.1.1",
   "type": "module",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
