@@ -647,6 +647,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"api-def@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "api-def@workspace:."
+  dependencies:
+    "@commitlint/config-conventional": "npm:^19.1.0"
+    "@inc-dev/eslint-config": "npm:^1.2.0"
+    "@inc-dev/prettier-config": "npm:^1.1.0"
+    "@types/eslint": "npm:^8"
+    commitlint: "npm:^19.0.3"
+    eslint: "npm:^8.57.0"
+    husky: "npm:^9.0.11"
+    lint-staged: "npm:^15.2.2"
+    prettier: "npm:^3.2.5"
+  languageName: unknown
+  linkType: soft
+
 "argparse@npm:^2.0.1":
   version: 2.0.1
   resolution: "argparse@npm:2.0.1"
@@ -2535,22 +2551,6 @@ __metadata:
   checksum: 10c0/cb53e582785c48187d7a188d3379c181b5ca2a9c78d2bce3e7dee36f32761d1c42983da3fe12b55cb74e1779fa94cdc2e5367c028a9b35317184ede0c07a30a9
   languageName: node
   linkType: hard
-
-"lumina@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "lumina@workspace:."
-  dependencies:
-    "@commitlint/config-conventional": "npm:^19.1.0"
-    "@inc-dev/eslint-config": "npm:^1.2.0"
-    "@inc-dev/prettier-config": "npm:^1.1.0"
-    "@types/eslint": "npm:^8"
-    commitlint: "npm:^19.0.3"
-    eslint: "npm:^8.57.0"
-    husky: "npm:^9.0.11"
-    lint-staged: "npm:^15.2.2"
-    prettier: "npm:^3.2.5"
-  languageName: unknown
-  linkType: soft
 
 "meow@npm:^12.0.1":
   version: 12.1.1
