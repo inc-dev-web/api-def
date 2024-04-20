@@ -1,0 +1,29 @@
+{
+  "name": "api-def",
+  "packageManager": "yarn@4.1.1",
+  "workspaces": [
+    "packages/*"
+  ],
+  "prettier": "@inc-dev/prettier-config",
+  "scripts": {
+    "lint": "eslint . --ext ts,js,vue --fix",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@inc-dev/eslint-config": "^1.2.0",
+    "@inc-dev/prettier-config": "^1.1.0",
+    "@types/eslint": "^8",
+    "commitlint": "^19.0.3",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5"
+  },
+  "lint-staged": {
+    "*.{json,yml,css,md}": "prettier --write",
+    "*.{js,ts,vue}": "eslint --fix"
+  },
+  "dependencies": {
+    "@commitlint/config-conventional": "^19.1.0"
+  }
+}
