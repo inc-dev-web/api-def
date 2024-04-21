@@ -1,0 +1,23 @@
+{
+  "name": "@api-def/provider-http",
+  "version": "0.0.1",
+  "packageManager": "yarn@4.1.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@api-def/core": "workspace:^",
+    "query-string": "^9.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
