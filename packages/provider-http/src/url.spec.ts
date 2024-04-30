@@ -1,5 +1,5 @@
 import { describe, expect, it, vitest } from 'vitest'
-import { createRequestUrl } from './url.js'
+import { createRequestUrl } from './url'
 
 describe('createRequestUrl', () => {
   it('should return plain endpoint url if empty base url or query parameters is specified and url is plain string', async () => {

@@ -1,13 +1,13 @@
 import type { EndpointDefinition } from '@api-def/core'
-import { resolveStaticOrResolved } from './utils/static-or-resolved.js'
-import { authenticateRequest } from './authentication.js'
+import { resolveStaticOrResolved } from './utils/static-or-resolved'
+import { authenticateRequest } from './authentication'
 import type {
   CreateHttpApiConfig,
   HttpEndpointConfig,
   JsonHttpEndpointConfig,
-} from './types.js'
-import { createRequestInit } from './request.js'
-import { createRequestUrl } from './url.js'
+} from './types'
+import { createRequestInit } from './request'
+import { createRequestUrl } from './url'
 
 export const createHttpApi = <TError = Error>(
   apiConfig: CreateHttpApiConfig
@@ -75,7 +75,11 @@ export const createHttpApi = <TError = Error>(
           }
         }
 
-        return await endpointConfig.output(responseData, response)
+        const transformedResult = await endpointConfig.output(
+          responseData,
+          response
+        )
+        return transformedResult
       },
     }
 

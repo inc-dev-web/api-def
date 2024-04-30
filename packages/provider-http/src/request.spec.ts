@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
-import { createRequestInit } from './request.js'
-import type { HttpEndpointConfig } from './types.js'
+import { createRequestInit } from './request'
+import type { HttpEndpointConfig } from './types'
 
 describe('createRequestInit', () => {
   let outputFn

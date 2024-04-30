@@ -1,4 +1,4 @@
-import { createHttpApi } from './http-api.js'
+import { createHttpApi } from './http-api'
 import { describe, it, expect } from 'vitest'
 
 describe('createHttpApi', () => {

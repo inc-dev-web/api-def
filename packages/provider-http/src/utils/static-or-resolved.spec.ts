@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { resolveStaticOrResolved } from './static-or-resolved.js'
+import { resolveStaticOrResolved } from './static-or-resolved'
 
 describe('resolveStaticOrResolved', () => {
   it('should return static value if static value is given as first parameter', async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { attachBaseUrl } from './attach-base-url.js'
+import { attachBaseUrl } from './attach-base-url'
 
 describe('attachBaseUrl', () => {
   it('should return only url if baseUrl is empty', () => {

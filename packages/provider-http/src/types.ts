@@ -1,5 +1,5 @@
 import type { EndpointExecuteResult } from '@api-def/core'
-import type { StaticOrResolved } from './utils/static-or-resolved.js'
+import type { StaticOrResolved } from './utils/static-or-resolved'
 
 export type HttpAuthenticationStrategy = {
   getIsAuthenticated?: () => StaticOrResolved<boolean>

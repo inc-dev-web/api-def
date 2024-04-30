@@ -1,5 +1,5 @@
-import type { HttpAuthenticationStrategy, HttpEndpointConfig } from './types.js'
-import { resolveStaticOrResolved } from './utils/static-or-resolved.js'
+import type { HttpAuthenticationStrategy, HttpEndpointConfig } from './types'
+import { resolveStaticOrResolved } from './utils/static-or-resolved'
 
 export const authenticateRequest = async <TInput, TOutput, TError>(
   request: RequestInit,

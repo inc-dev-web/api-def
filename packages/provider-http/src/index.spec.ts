@@ -4,7 +4,7 @@ describe('index', () => {
   let imported: any
 
   beforeEach(async () => {
-    imported = await import('./index.js')
+    imported = await import('./index')
   })
 
   it('should export createHttpApi function', () => {

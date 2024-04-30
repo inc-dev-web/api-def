@@ -1,2 +1,2 @@
-export * from './http-api.js'
-export type * from './types.js'
+export * from './http-api'
+export type * from './types'

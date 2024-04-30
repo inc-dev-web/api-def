@@ -1,6 +1,6 @@
-import type { CreateHttpApiConfig, HttpEndpointConfig } from './types.js'
-import { attachBaseUrl } from './utils/attach-base-url.js'
-import { resolveStaticOrResolved } from './utils/static-or-resolved.js'
+import type { CreateHttpApiConfig, HttpEndpointConfig } from './types'
+import { attachBaseUrl } from './utils/attach-base-url'
+import { resolveStaticOrResolved } from './utils/static-or-resolved'
 
 import qs from 'query-string'
 
