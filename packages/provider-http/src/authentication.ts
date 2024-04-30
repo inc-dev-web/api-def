@@ -22,5 +22,10 @@ export const authenticateRequest = async <TInput, TOutput, TError>(
     throw new Error('Not Authenticated')
   }
 
-  return await resolveStaticOrResolved(strategy.authenticateRequest, request)
+  const result = await resolveStaticOrResolved(
+    strategy.authenticateRequest,
+    request
+  )
+
+  return result
 }
