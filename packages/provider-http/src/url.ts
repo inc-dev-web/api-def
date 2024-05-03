@@ -12,7 +12,8 @@ export const createRequestUrl = async <TInput, TOutput, TError>(
   >,
   data: TInput
 ): Promise<string> => {
-  const endpointUrl = attachBaseUrl(endpointConfig.url, apiConfig.baseUrl)
+  const resolvedUrl = await resolveStaticOrResolved(endpointConfig.url, data)
+  const endpointUrl = attachBaseUrl(resolvedUrl, apiConfig.baseUrl)
 
   const queryParamsObject = endpointConfig.query
     ? await resolveStaticOrResolved(endpointConfig.query, data)

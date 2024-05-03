@@ -18,6 +18,27 @@ describe('createRequestUrl', () => {
     expect(requestUrlResult).toBe(url)
   })
 
+  it('should return resolved endpoint url and execute resolver if empty base url or query parameters is specified and url is resolver (sync function)', async () => {
+    const url = vitest.fn(() => '/url')
+    const expectedResult = '/url'
+    const param = {}
+
+    const requestUrlResult = await createRequestUrl(
+      {
+        baseUrl: '',
+      },
+      {
+        url,
+      },
+      param
+    )
+
+    expect(requestUrlResult).toStrictEqual(expectedResult)
+    expect(url).toBeCalled()
+    expect(url).toBeCalledTimes(1)
+    expect(url).toBeCalledWith(param)
+  })
+
   it('should return endpoint url with base url if base url is specified', async () => {
     const baseUrl = 'https://google.com'
     const url = '/url'
@@ -107,5 +128,37 @@ describe('createRequestUrl', () => {
     expect(queryParameters).toBeCalled()
     expect(queryParameters).toBeCalledTimes(1)
     expect(queryParameters).toBeCalledWith(param)
+  })
+
+  it('should execute query parameters function and url and return endpoint url with returned parameters', async () => {
+    const baseUrl = 'https://google.com'
+    const url = vitest.fn(() => '/url')
+    const queryParameters = vitest.fn(() => ({
+      parameter1: 100,
+      parameter2: 200,
+    }))
+    const param = {}
+
+    const expectedResult =
+      'https://google.com/url?parameter1=100&parameter2=200'
+
+    const requestUrlResult = await createRequestUrl(
+      {
+        baseUrl,
+      },
+      {
+        url,
+        query: queryParameters,
+      },
+      param
+    )
+
+    expect(requestUrlResult).toStrictEqual(expectedResult)
+    expect(queryParameters).toBeCalled()
+    expect(queryParameters).toBeCalledTimes(1)
+    expect(queryParameters).toBeCalledWith(param)
+    expect(url).toBeCalled()
+    expect(url).toBeCalledTimes(1)
+    expect(url).toBeCalledWith(param)
   })
 })

@@ -16,7 +16,7 @@ export type CreateHttpApiConfig = {
 }
 
 export type HttpEndpointConfig<TInput, TOutput, TError> = {
-  url: string
+  url: StaticOrResolved<string, TInput>
   method: string
 
   headers?: StaticOrResolved<Record<string, string>> | undefined
@@ -34,7 +34,7 @@ export type HttpEndpointConfig<TInput, TOutput, TError> = {
 }
 
 export type JsonHttpEndpointConfig<TInput, TOutput, TError> = {
-  url: string
+  url: StaticOrResolved<string, TInput>
   method: string
 
   headers?: StaticOrResolved<Record<string, string>>
