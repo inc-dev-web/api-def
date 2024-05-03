@@ -39,8 +39,8 @@ export type JsonHttpEndpointConfig<TInput, TOutput, TError> = {
 
   headers?: StaticOrResolved<Record<string, string>>
 
-  body?: StaticOrResolved<any, TInput>
-  query?: StaticOrResolved<Record<string, any>, TInput>
+  body?: 'input' | StaticOrResolved<any, TInput>
+  query?: 'input' | StaticOrResolved<Record<string, any>, TInput>
   output:
     | ((
         data: unknown,

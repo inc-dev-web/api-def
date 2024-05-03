@@ -83,33 +83,35 @@ export const createHttpApi = <TError = Error>(
       },
     }
 
-    // Is used to have some default working behavior for GET requests. Will cover most of usecases and pretty convenient tbh
-    if (endpointConfig.method === 'GET') {
-      return defineEndpoint<TInput, TOutput, TEndpointError>({
-        ...baseEndpointConfig,
-        query: endpointConfig.query ?? ((input) => input),
-      })
-    }
+    const query =
+      endpointConfig.query === 'input'
+        ? (input: TInput) => input
+        : endpointConfig.query
+
+    const jsonBody = (data: any) => ({
+      body: JSON.stringify(data),
+      contentType: 'application/json',
+    })
+
+    const body = endpointConfig.body
+      ? async (input: TInput) => {
+          if (endpointConfig.body === 'input') {
+            return jsonBody(input)
+          }
+
+          const transformedBody = await resolveStaticOrResolved(
+            endpointConfig.body,
+            input
+          )
+
+          return jsonBody(transformedBody)
+        }
+      : undefined
 
     return defineEndpoint<TInput, TOutput, TEndpointError>({
       ...baseEndpointConfig,
-      query: endpointConfig.query,
-      body: async (data) => {
-        if (!data) {
-          return {
-            body: undefined,
-          }
-        }
-
-        const transformedData = endpointConfig.body
-          ? await resolveStaticOrResolved(endpointConfig.body, data)
-          : data
-
-        return {
-          body: JSON.stringify(transformedData),
-          contentType: 'application/json',
-        }
-      },
+      query,
+      body,
     })
   }
 
