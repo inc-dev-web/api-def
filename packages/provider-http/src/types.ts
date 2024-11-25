@@ -19,7 +19,7 @@ export type HttpEndpointConfig<TInput, TOutput, TError> = {
   url: StaticOrResolved<string, TInput>
   method: string
 
-  headers?: StaticOrResolved<Record<string, string>> | undefined
+  headers?: StaticOrResolved<Record<string, string>, TInput> | undefined
 
   body?:
     | StaticOrResolved<
@@ -37,7 +37,7 @@ export type JsonHttpEndpointConfig<TInput, TOutput, TError> = {
   url: StaticOrResolved<string, TInput>
   method: string
 
-  headers?: StaticOrResolved<Record<string, string>>
+  headers?: StaticOrResolved<Record<string, string>, TInput>
 
   body?: 'input' | StaticOrResolved<any, TInput>
   query?: 'input' | StaticOrResolved<Record<string, any>, TInput>
