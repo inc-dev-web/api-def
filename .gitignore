@@ -3,6 +3,8 @@
 !.yarn/releases
 !.yarn/plugins
 
+.idea
+
 .eslintcache
 node_modules
 

@@ -76,4 +76,21 @@ describe('createRequestInit', () => {
     expect(body).toBeCalled()
     expect(body).toBeCalledWith(param)
   })
+
+  it('should dynamically resolve headers using a function and include them in the request', async () => {
+    const data = { token: 'dynamic-token' }
+    const headersFn = vitest.fn((data) => ({
+      Authorization: `Bearer ${data.token}`,
+    }))
+    endpointConfig.headers = headersFn
+
+    const expectedHeaders = { Authorization: `Bearer ${data.token}` }
+
+    const result = await createRequestInit(endpointConfig, data)
+
+    expect(typeof result).toBe('object')
+    expect(result.headers).toStrictEqual(expectedHeaders)
+    expect(headersFn).toBeCalledTimes(1)
+    expect(headersFn).toBeCalledWith(data)
+  })
 })
