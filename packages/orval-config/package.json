@@ -1,0 +1,23 @@
+{
+  "name": "@api-def/orval-config",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@api-def/core": "workspace:^",
+    "@orval/core": "^7.11.2",
+    "openapi3-ts": "^4.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
