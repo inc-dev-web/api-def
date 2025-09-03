@@ -177,23 +177,8 @@ ${compositeErrorResponse}\n\n
   }
   `
 
-  const reviver = fetchReviver ? `, ${fetchReviver.name}` : '';
   const fetchResponseImplementation = `
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: ${successfulResponseTypeName} = body ? JSON.parse(body${reviver}) : undefined
-
-  if (!res.status.toString().startsWith('2')) {
-    return {
-      success: false,
-      error: data,
-    }
-  }
-
-
-  return {
-    success: true,
-    output: data
-  }
+  return validateAndReturnResponse<${successfulResponseTypeName}, ${errorResponseTypeName}>(res);
 `;
 
   const bodyForm = generateFormDataAndUrlEncodedFunction({
@@ -228,7 +213,7 @@ ${compositeErrorResponse}\n\n
       }}) => {
         ${bodyForm ? bodyForm : ''}
       ${bodyFactoryImplementation}}` : `undefined`},
-      output: async (res) => {
+      output: (res) => {
       ${fetchResponseImplementation}
       },
       requireAuthentication: ${requireAuthentication ? 'true' : 'false'},
@@ -269,7 +254,32 @@ const generateClient: ClientBuilder = (verbOptions, options) => {
 const generateHeader: ClientHeaderBuilder = () => {
   return `
 import '@api-def/core'
-export type HttpApi = ReturnType<typeof createHttpApi>\n\n
+export type HttpApi = ReturnType<typeof createHttpApi>
+
+const validateAndReturnResponse = async <TSuccess, TError>(res: Response): Promise<EndpointExecuteResult<TSuccess, TError>> => {
+  if ([204, 205, 304].includes(res.status)) {
+    return {
+      success: true,
+      output: undefined,
+    }
+  }
+
+  const isError = res.status.toString().startsWith('2')
+  const data = res.body ? await res.json() : undefined
+
+  if (isError) {
+    return {
+      success: false,
+      error: data as TError,
+    }
+  }
+
+  return {
+    success: true,
+    output: data as TSuccess,
+  }
+}
+\n
   `
 };
 
@@ -305,7 +315,7 @@ const fetchClientBuilder: ClientGeneratorsBuilder = {
       dependency: '@api-def/core',
       exports: [
         {
-          name: 'EndpointDefinition',
+          name: 'EndpointExecuteResult',
         }
       ]
     }
