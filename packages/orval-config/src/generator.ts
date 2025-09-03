@@ -13,7 +13,8 @@ import {
   pascal,
   camel, 
   ClientFooterBuilder, 
-  TEMPLATE_TAG_REGEX
+  TEMPLATE_TAG_REGEX,
+  ResReqTypesValue
 } from '@orval/core';
 import {
   PathItemObject,
@@ -46,17 +47,8 @@ export const generateRequestFunction = (
 
   const inputTypeName = pascal(`${operationName}-input`)
 
-  const isContentTypeNdJson = (contentType: string) =>
-    contentType === 'application/nd-json' ||
-    contentType === 'application/x-ndjson';
-
-  const isNdJson = response.contentTypes.some(isContentTypeNdJson);
-
-  const responseTypeName = fetchResponseTypeName(
-    override.fetch?.includeHttpResponseReturnType,
-    isNdJson ? 'Response' : response.definition.success,
-    operationName,
-  );
+  const successfulResponseTypeName = pascal(`${operationName}SuccessfulResponse`)
+  const errorResponseTypeName = pascal(`${operationName}ErrorResponse`)
 
   const spec = context.specs[context.specKey]!.paths[pathRoute] as
     | PathItemObject
@@ -131,45 +123,28 @@ ${
   return normalizedParams;
   `
 
-  const allResponses = [...response.types.success, ...response.types.errors];
-  if (allResponses.length === 0) {
-    allResponses.push({
-      contentType: '',
-      hasReadonlyProps: false,
-      imports: [],
-      isEnum: false,
-      isRef: false,
-      key: 'default',
-      schemas: [],
-      type: 'unknown',
-      value: 'unknown',
-    });
+  const mapResponseDataType = (response: ResReqTypesValue) => {
+    const name = `${successfulResponseTypeName}${pascal(response.key)}`;
+    return {
+      name,
+      value: `export type ${name} = ${response.value || 'unknown'}
+`,
+    };
   }
 
-  const responseDataTypes = allResponses
-    .map((r) =>
-      allResponses.filter((r2) => r2.key === r.key).length > 1
-        ? { ...r, suffix: pascal(r.contentType) }
-        : r,
-    )
-    .map((r) => {
-      const name = `${responseTypeName}${pascal(r.key)}${'suffix' in r ? r.suffix : ''}`;
-      return {
-        name,
-        value: `export type ${name} = ${r.value || 'unknown'}
-`,
-      };
-    });
+  const successfulResponseTypes = response.types.success.map(mapResponseDataType);
+  const errorResponseTypes = response.types.errors.map(mapResponseDataType);
 
-  const compositeResponse = `${responseTypeName} = ${responseDataTypes.map((r) => r.name).join(' | ')}`;
+  const compositeSuccessfulResponse = `export type ${successfulResponseTypeName} = ${successfulResponseTypes.length > 0 ? successfulResponseTypes.map((r) => r.name).join(' | ') : 'unknown'}`;
+  const compositeErrorResponse = `export type ${errorResponseTypeName} = ${errorResponseTypes.length > 0 ? errorResponseTypes.map((r) => r.name).join(' | ') : 'unknown'}`;
 
-  const responseTypeImplementation = override.fetch
-    .includeHttpResponseReturnType
-    ? `${responseDataTypes.map((r) => r.value).join('\n\n')}
+  const responseTypeImplementation = `
+${successfulResponseTypes.map((r) => r.value).join('\n\n')}
+${errorResponseTypes.map((r) => r.value).join('\n\n')}
     
-export type ${compositeResponse};
+${compositeSuccessfulResponse}
+${compositeErrorResponse}
 `
-    : '';
 
   const propsImplementation = toObjectString(
     props,
@@ -202,7 +177,7 @@ export type ${compositeResponse};
   const reviver = fetchReviver ? `, ${fetchReviver.name}` : '';
   const fetchResponseImplementation = `
   const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: ${responseTypeName} = body ? JSON.parse(body${reviver}) : {}
+  const data: ${successfulResponseTypeName} = body ? JSON.parse(body${reviver}) : {}
 
   if (!res.status.toString().startsWith('2')) {
     return {
@@ -229,7 +204,7 @@ export type ${compositeResponse};
   const params = props.filter((p) => p.type === GetterPropType.PARAM || p.type === GetterPropType.NAMED_PATH_PARAMS)
 
   const definitionImplementation = `
-    return httpApi.defineEndpoint<${inputTypeName}, ${responseTypeName}>({
+    return httpApi.defineEndpoint<${inputTypeName}, ${successfulResponseTypeName}, ${errorResponseTypeName}>({
       url: (${ params.length > 0 ? `{${toObjectString(
         params,
         'name'
@@ -291,7 +266,7 @@ const generateClient: ClientBuilder = (verbOptions, options) => {
 const generateHeader: ClientHeaderBuilder = () => {
   return `
 import '@api-def/core'
-export type HttpApi = ReturnType<typeof createHttpApi>
+export type HttpApi = ReturnType<typeof createHttpApi>\n\n
   `
 };
 
