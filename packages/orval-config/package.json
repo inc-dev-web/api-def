@@ -1,6 +1,6 @@
 {
   "name": "@api-def/orval-config",
-  "version": "0.0.1-beta.3",
+  "version": "0.0.1-beta.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -21,7 +21,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --sourcemap"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "prepublish": "pnpm run build"
   },
   "dependencies": {
     "@api-def/core": "workspace:^",

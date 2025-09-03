@@ -289,10 +289,9 @@ const generateClient: ClientBuilder = (verbOptions, options) => {
 };
 
 const generateHeader: ClientHeaderBuilder = () => {
-  const httpApi = `export type HttpApi = ReturnType<typeof createHttpApi>`
-
   return `
-${httpApi}
+import '@api-def/core'
+export type HttpApi = ReturnType<typeof createHttpApi>
   `
 };
 
