@@ -256,14 +256,7 @@ const generateHeader: ClientHeaderBuilder = () => {
 import '@api-def/core'
 export type HttpApi = ReturnType<typeof createHttpApi>
 
-const validateAndReturnResponse = async <TSuccess, TError>(res: Response): Promise<EndpointExecuteResult<TSuccess, TError>> => {
-  if ([204, 205, 304].includes(res.status)) {
-    return {
-      success: true,
-      output: undefined,
-    }
-  }
-
+const validateAndReturnResponse = async <TSuccess, TError>(res: Response): EndpointExecuteResult<TSuccess, TError> => {
   const isError = res.status.toString().startsWith('2')
   const data = res.body ? await res.json() : undefined
 
