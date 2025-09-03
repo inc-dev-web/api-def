@@ -2,4 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 message="$(cat $1)"
-echo $message | yarn commitlint
+echo $message | pnpm commitlint
