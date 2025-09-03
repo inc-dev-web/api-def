@@ -1,4 +1,17 @@
 import generator from './generator.js'
-import { defineConfig } from './config.js'
+import {
+  defineConfig,
+  Config,
+  Options,
+  OriginalConfig,
+  OriginalOptions,
+} from './config.js'
 
-export { generator, defineConfig }
+export {
+  generator,
+  defineConfig,
+  Config,
+  Options,
+  OriginalConfig,
+  OriginalOptions,
+}
