@@ -125,9 +125,10 @@ ${
 
   const mapResponseDataType = (response: ResReqTypesValue) => {
     const name = `${successfulResponseTypeName}${pascal(response.key)}`;
+    const normalizedValue = response.value === 'null' ? 'undefined' : response.value;
     return {
       name,
-      value: `export type ${name} = ${response.value || 'unknown'}
+      value: `export type ${name} = ${normalizedValue || 'unknown'}
 `,
     };
   }
@@ -139,11 +140,13 @@ ${
   const compositeErrorResponse = `export type ${errorResponseTypeName} = ${errorResponseTypes.length > 0 ? errorResponseTypes.map((r) => r.name).join(' | ') : 'unknown'}`;
 
   const responseTypeImplementation = `
-${successfulResponseTypes.map((r) => r.value).join('\n\n')}
-${errorResponseTypes.map((r) => r.value).join('\n\n')}
+${successfulResponseTypes.map((r) => r.value).join('\n')}
+
+${errorResponseTypes.map((r) => r.value).join('\n')}
     
 ${compositeSuccessfulResponse}
-${compositeErrorResponse}
+
+${compositeErrorResponse}\n\n
 `
 
   const propsImplementation = toObjectString(
@@ -177,7 +180,7 @@ ${compositeErrorResponse}
   const reviver = fetchReviver ? `, ${fetchReviver.name}` : '';
   const fetchResponseImplementation = `
   const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: ${successfulResponseTypeName} = body ? JSON.parse(body${reviver}) : {}
+  const data: ${successfulResponseTypeName} = body ? JSON.parse(body${reviver}) : undefined
 
   if (!res.status.toString().startsWith('2')) {
     return {
